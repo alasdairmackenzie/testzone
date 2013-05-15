@@ -30,8 +30,17 @@ define('REDIRECT_URL', 'http://www.designmynight.com');
 
 <?php
 
-if ( !isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN ||  $_SERVER["SERVER_NAME"] != SERVER_NAME ) {
+// pay load from git hub
+$payload = json_decode($_REQUEST['payload']);
+
+// auth errors
+if ( empty($payload) || !isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN ||  $_SERVER["SERVER_NAME"] != SERVER_NAME ) {
   header('Location: ' . REDIRECT_URL);
+}
+
+// lets check we have the master
+if ($payload->ref === 'refs/heads/master') {
+	die();
 }
 
 ?>
@@ -187,4 +196,3 @@ Done.
 </pre>
 </body>
 </html>
-
