@@ -1,124 +1,38 @@
 <?php
 /**
  * Simple PHP GIT deploy script
- *
- * Automatically deploy the code using php and git.
- *
+ * 
  * @version 1.0.8
  * @link    https://github.com/markomarkovic/simple-php-git-deploy/
  */
 
 // =========================================[ Configuration start ]===
 
-/**
- * Protect the script from unauthorized access by using a secret string.
- * If it's not present in the access URL as a GET variable named `sat`
- * e.g. deploy.php?sat=Bett...s the script is going to fail.
- *
- * @var string
- */
-define('SECRET_ACCESS_TOKEN', 'BetterChangeMeNowOrSufferTheConsequences1');
-
-/**
- * The address of the remote GIT repository that contains the code we're
- * updating.
- *
- * @var string
- */
+define('SECRET_ACCESS_TOKEN', 'DesignMyNight_QA_99');
 define('REMOTE_REPOSITORY', 'https://github.com/alasdairmackenzie/testzone.git');
-
-/**
- * Which branch are we going to use for deployment.
- *
- * @var string
- */
 define('BRANCH', 'master');
-
-/**
- * This is where the code resides on the local machine.
- * Don't forget the trailing slash!
- *
- * @var string Full path including the trailing slash
- */
 define('TARGET_DIR', '/var/www/subdomains/qa/html-git');
-
-/**
- * Weather to delete the files that are not in the repository but are on the
- * local machine.
- *
- * !!! WARNING !!! This can lead to a serious loss of data if you're not
- * careful. All files that are not in the repository are going to be deleted,
- * except the ones defined in EXCLUDE section! BE CAREFUL!
- *
- * @var boolean
- */
 define('DELETE_FILES', false);
-
-/**
- * The directories and files that are to be excluded when updating the code.
- * Normally, these are the directories containing files that are not part of
- * code base, for example user uploads or server-specific configuration files.
- * Use rsync exclude pattern syntax for each element.
- *
- * @var serialized array of strings
- */
-define('EXCLUDE', serialize(array(
-	'.git',
-)));
-
-/**
- * Temporary directory we'll use to stage the code before the update.
- *
- * @var string Full path including the trailing slash
- */
-define('TMP_DIR', '/var/www/subdomains/qa/tmp/temp-'.md5(REMOTE_REPOSITORY).'-'.time().'/');
-
-/**
- * Output the version of the deployed code.
- *
- * @var string Full path to the file name
- */
+define('EXCLUDE', serialize(array('.git',)));
+define('TMP_DIR', '/var/www/subdomains/qa/tmp/html-'.md5(REMOTE_REPOSITORY).'-'.time().'/');
 define('VERSION_FILE', TMP_DIR.'DEPLOYED_VERSION.txt');
-
-/**
- * Time limit for each command.
- *
- * @var int Time in seconds
- */
 define('TIME_LIMIT', 30);
-
-/**
- * OPTIONAL
- * Backup the TARGET_DIR into BACKUP_DIR before deployment
- *
- * @var string Full backup directory path e.g. '/tmp/'
- */
-define('BACKUP_DIR', false);
+define('BACKUP_DIR', true);
 
 // ===========================================[ Configuration end ]===
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Simple PHP GIT deploy script</title>
-	<style>
-body { padding: 0 1em; background: #222; color: #fff; }
-h2, .error { color: #c33; }
-.prompt { color: #6be234; }
-.command { color: #729fcf; }
-.output { color: #999; }
-	</style>
-</head>
-<body>
+<head><meta charset="utf-8"><title>Simple PHP GIT deploy script</title></head><body>
+
 <?php
+
 if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN) {
 	die('<h2>ACCESS DENIED!</h2>');
 }
-if (SECRET_ACCESS_TOKEN === 'BetterChangeMeNowOrSufferTheConsequences') {
-	die("<h2>You're suffering the consequences!<br>Change the SECRET_ACCESS_TOKEN from it's default value!</h2>");
-}
+
 ?>
 <pre>
 
@@ -156,7 +70,6 @@ $commands = array();
 // ========================================[ Pre-Deployment steps ]===
 
 // Remove the TMP_DIR
-//$commands[] = '--session-command';
 
 // Clone the repository into the TMP_DIR
 $commands[] = sprintf(
