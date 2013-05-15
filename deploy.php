@@ -126,7 +126,6 @@ $commands[] = sprintf(
 	, TARGET_DIR
 	, (DELETE_FILES) ? '--delete-after' : ''
 	, $exclude
-	, "-O"
 );
 
 // =======================================[ Post-Deployment steps ]===
