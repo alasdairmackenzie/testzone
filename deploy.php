@@ -5,10 +5,10 @@
  * @version 1.0.8
  * @link    https://github.com/markomarkovic/simple-php-git-deploy/
  */
-
 // =========================================[ Configuration start ]===
 
 define('SECRET_ACCESS_TOKEN', 'DesignMyNight_QA_99');
+define('SERVER_NAME', 'qa.designmynight.com');
 define('REMOTE_REPOSITORY', 'https://github.com/alasdairmackenzie/testzone.git');
 define('BRANCH', 'master');
 define('TARGET_DIR', '/var/www/subdomains/qa/html-git');
@@ -18,6 +18,7 @@ define('TMP_DIR', '/var/www/subdomains/qa/tmp/html-'.md5(REMOTE_REPOSITORY).'-'.
 define('VERSION_FILE', TMP_DIR.'DEPLOYED_VERSION.txt');
 define('TIME_LIMIT', 30);
 define('BACKUP_DIR', true);
+define('REDIRECT_URL', 'http://www.designmynight.com');
 
 // ===========================================[ Configuration end ]===
 
@@ -29,8 +30,8 @@ define('BACKUP_DIR', true);
 
 <?php
 
-if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN) {
-	die('<h2>ACCESS DENIED!</h2>');
+if ( !isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN ||  $_SERVER["SERVER_NAME"] != SERVER_NAME ) {
+  header('Location: ' . REDIRECT_URL);
 }
 
 ?>
